@@ -154,7 +154,6 @@ export default function Index() {
         },
         { onlyOnce: true },
       );
-      // router.push("/main");
     }
   }
 

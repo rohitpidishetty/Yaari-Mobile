@@ -30,6 +30,38 @@ export default function RootLayout() {
           name="user"
           options={{ headerShown: false, animation: "slide_from_right" }}
         />
+        <Stack.Screen
+          name="imageview"
+          options={{ headerShown: false, animation: "slide_from_right" }}
+        />
+        <Stack.Screen
+          name="comments"
+          options={{ headerShown: false, animation: "slide_from_bottom" }}
+        />
+        <Stack.Screen
+          name="friends"
+          options={{ headerShown: false, animation: "slide_from_right" }}
+        />
+        <Stack.Screen
+          name="edit_user"
+          options={{ headerShown: false, animation: "slide_from_right" }}
+        />
+        <Stack.Screen
+          name="edit_profile"
+          options={{ headerShown: false, animation: "slide_from_right" }}
+        />
+        <Stack.Screen
+          name="edit_security"
+          options={{ headerShown: false, animation: "slide_from_right" }}
+        />
+        <Stack.Screen
+          name="notifications"
+          options={{ headerShown: false, animation: "slide_from_right" }}
+        />
+        <Stack.Screen
+          name="explore"
+          options={{ headerShown: false, animation: "slide_from_right" }}
+        />
       </Stack>
     </Provider>
   );

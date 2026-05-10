@@ -11,9 +11,9 @@ export default function Footer() {
 
   const tabs = [
     { name: "Home", icon: "home-outline", activeIcon: "home", path: "/main" },
-    { name: "Search", icon: "search-outline", activeIcon: "search", path: "/search" },
+    { name: "Search", icon: "search-outline", activeIcon: "search", path: "/explore" },
     { name: "Messages", icon: "chatbox-outline", activeIcon: "chatbox", path: "/search" },
-    { name: "Notifications", icon: "notifications-outline", activeIcon: "notifications", path: "/settings" },
+    { name: "Notifications", icon: "notifications-outline", activeIcon: "notifications", path: "/notifications" },
     { name: "Profile", icon: "person-circle-outline", activeIcon: "person-circle", path: "/user" },
   ];
 
@@ -29,7 +29,7 @@ export default function Footer() {
               style={styles.tabButton}
               onPress={() => router.push(tab.path)}
             >
-              <Image style={{width:24, height:24, borderRadius:50}} source={{ uri: userObject?.payload?.profile_picture }} />
+              <Image style={{ width: 24, height: 24, borderRadius: 50 }} source={{ uri: userObject?.payload?.profile_picture }} />
 
             </TouchableOpacity>
           )

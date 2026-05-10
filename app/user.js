@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Link, useRouter } from "expo-router";
 import { getDatabase, onValue, ref } from "firebase/database";
 import { lazy, Suspense, useEffect, useState } from "react";
-import { Image, Pressable, StyleSheet, Text, useColorScheme, View } from "react-native";
+import { Image, Modal, Pressable, StyleSheet, Text, useColorScheme, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import Footer from "./footer";
@@ -23,7 +23,6 @@ export default function User() {
   const user = useSelector((state) => state.user.userDetails);
 
 
-  console.log(Object.keys(user.payload.friends).length)
 
   const [bg, setBg] = useState("");
   const [bio, setBio] = useState("");
@@ -53,6 +52,11 @@ export default function User() {
   }, []);
 
 
+  const [editModal, showEditModal] = useState(false);
+
+
+
+
 
 
   const themeContainerStyle = isDarkMode
@@ -70,6 +74,45 @@ export default function User() {
     <SafeAreaView style={[styles.container, themeContainerStyle]}>
       <Footer />
 
+      {/* Edit Modal */}
+
+      <Modal transparent visible={editModal} animationType="fade">
+        <Pressable
+          style={styles.optOverlay}
+          onPress={() => showEditModal(true)}
+        >
+          <View style={styles.sheet}>
+
+            <Pressable onPress={() => router.push("/edit_user")} style={styles.row}>
+              <Ionicons name="person-outline" size={22} color="#fff" />
+              <Text style={styles.text}>User</Text>
+            </Pressable>
+
+            <Pressable onPress={() => router.push("/edit_profile")} style={styles.row}>
+              <Ionicons name="person-circle-outline" size={22} color="#fff" />
+              <Text style={styles.text}>Profile</Text>
+            </Pressable>
+
+            <Pressable onPress={() => router.push("/edit_security")} style={styles.row}>
+              <Ionicons name="shield-checkmark-outline" size={22} color="#fff" />
+              <Text style={styles.text}>Security</Text>
+            </Pressable>
+
+
+
+            <Pressable onPress={() => showEditModal(false)} style={styles.row}>
+              <Ionicons name="close-outline" size={22} color="#fff" />
+              <Text style={styles.text}>Close</Text>
+            </Pressable>
+
+          </View>
+        </Pressable>
+      </Modal>
+
+
+      {/* Edit Modal */}
+
+
       <View>
         <Image style={{ height: 200 }} source={{ uri: bg }} />
       </View>
@@ -82,8 +125,9 @@ export default function User() {
           <View style={style.rightCompTopComp} >
             <View style={{ flex: 1 }}>
               <Pressable
+                onPress={() => showEditModal(true)}
                 style={{
-                  backgroundColor: "gray",
+                  backgroundColor: "#443A3A",
                   paddingVertical: 10,
                   paddingHorizontal: 20,
                   borderRadius: 8,
@@ -108,26 +152,26 @@ export default function User() {
             paddingTop: 10,
             paddingBottom: 10
           }} >
-            <Text style={{ color: "white" }}>{user.payload?.username}</Text>
+            <Text style={{ color: "white" }}>{user.payload?.username.toString()}</Text>
 
             <Pressable>
               <Text style={{ color: "white" }}>Posts {Object.keys(user?.payload?.posts)?.length.toString()}</Text>
             </Pressable>
 
-            <Pressable>
+            <Pressable onPress={() => router.push("/friends")}>
               <Text style={{ color: "white" }}>Friends {Object.keys(user?.payload?.friends)?.length.toString()}</Text>
             </Pressable>
           </View>
           <View>
-            <Text style={{ color: "white" }}>{bio}</Text>
-            <Link style={{ color: "#1E88E5" }} href={userPayload?.portfolio}>{userPayload?.portfolio}</Link>
+            <Text style={{ color: "white" }}>{bio.toString()}</Text>
+            <Link style={{ color: "#1E88E5" }} href={userPayload?.portfolio}>{userPayload?.portfolio.toString()}</Link>
           </View>
         </View>
       </View>
 
 
       <Suspense fallback="Loading Posts..">
-        <LazyComp posts={Object.values(userPayload.posts)} />
+        <LazyComp posts={Object.values(userPayload?.posts)} />
       </Suspense>
 
     </SafeAreaView>

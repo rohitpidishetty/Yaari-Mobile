@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 3,
-    
+
   },
   buttonText: {
     color: "#FFFFFF",
@@ -78,7 +78,7 @@ export const styles = StyleSheet.create({
   },
   alertBox: {
     width: 270, // Standard iOS Alert width
-    backgroundColor: '#1E1E1E' ,
+    backgroundColor: '#1E1E1E',
     borderRadius: 14,
     paddingTop: 20,
     alignItems: 'center',
@@ -92,7 +92,7 @@ export const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '600',
     marginBottom: 5,
-    color: 'white' ,
+    color: 'white',
   },
   alertMessage: {
     fontSize: 13,
@@ -115,8 +115,35 @@ export const styles = StyleSheet.create({
   },
   modal: {
     borderWidth: 2,
-    borderColor:"white",
-    position:"absolute",
-    backgroundColor:"white"
-  }
+    borderColor: "white",
+    position: "absolute",
+    backgroundColor: "white"
+  },
+
+  optOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    justifyContent: "flex-end",
+  },
+
+  sheet: {
+    backgroundColor: "#1c1c1e",
+    paddingVertical: 18,
+    paddingHorizontal: 16,
+    borderTopLeftRadius: 18,
+    borderTopRightRadius: 18,
+  },
+
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 14,
+    gap: 12,
+  },
+
+  text: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "500",
+  },
 });
