@@ -1,10 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
+import * as FileSystem from "expo-file-system/legacy";
 import { Link, useRouter } from "expo-router";
 import { getDatabase, onValue, ref } from "firebase/database";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Image, Modal, Pressable, StyleSheet, Text, useColorScheme, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Footer from "./footer";
 import { styles } from "./Styles/StyleSheet";
 
@@ -54,7 +55,10 @@ export default function User() {
 
   const [editModal, showEditModal] = useState(false);
 
+  const [optionShow, setOptionsShow] = useState(false);
 
+
+  const dispatch = useDispatch();
 
 
 
@@ -113,6 +117,45 @@ export default function User() {
       {/* Edit Modal */}
 
 
+      {/* Options Modal */}
+
+      <Modal transparent visible={optionShow} animationType="fade">
+        <Pressable
+          style={styles.optOverlay}
+          onPress={() => setOptionsShow(true)}
+        >
+          <View style={styles.sheet}>
+
+            <Pressable onPress={() => {
+
+              const fileName = "user-log.txt";
+
+              const path = FileSystem.documentDirectory + fileName;
+
+              FileSystem.deleteAsync(path, { idempotent: true }).then(() => {
+                router.push("/");
+              }).catch((err) => alert("Clear cache"));
+            }} style={styles.row}>
+              <Ionicons name="log-out-outline" size={22} color="#fff" />
+              <Text style={styles.text}>Logout</Text>
+            </Pressable>
+
+            <Pressable onPress={() => setOptionsShow(false)} style={styles.row}>
+              <Ionicons name="close-outline" size={22} color="#fff" />
+              <Text style={styles.text}>Close</Text>
+            </Pressable>
+
+          </View>
+        </Pressable>
+      </Modal>
+
+
+      {/* Options Modal */}
+
+
+
+
+
       <View>
         <Image style={{ height: 200 }} source={{ uri: bg }} />
       </View>
@@ -138,7 +181,9 @@ export default function User() {
                 </Text>
               </Pressable>
             </View>
-            <Pressable style={{ width: "10%" }}>
+            <Pressable onPress={() => {
+              setOptionsShow(true);
+            }} style={{ width: "10%", marginLeft: 10 }}>
               <Ionicons name="ellipsis-horizontal" size={18} color="white" />
             </Pressable>
           </View>

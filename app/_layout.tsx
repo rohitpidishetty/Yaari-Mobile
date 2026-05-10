@@ -62,6 +62,10 @@ export default function RootLayout() {
           name="explore"
           options={{ headerShown: false, animation: "slide_from_right" }}
         />
+        <Stack.Screen
+          name="post_comments"
+          options={{ headerShown: false, animation: "slide_from_bottom" }}
+        />
       </Stack>
     </Provider>
   );

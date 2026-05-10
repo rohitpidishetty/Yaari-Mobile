@@ -111,17 +111,7 @@ export default function ImageView() {
   const [option, showOptions] = useState(false);
   function handleOptions() {
     showOptions(true);
-    const refPath = `users/${user?.username}/posts/${post.post_id}`;
-    get(ref(db, `users/${user?.username}/posts/`)).then(snap => {
-      if (snap.exists()) {
-        var posts = snap.val();
-        posts = Object.keys(posts);
-        if (posts.length > 1)
-          remove(ref(db, refPath)).then(snap => { setHeader("Deleted"); setMessage("Post deleted successfully"); setShowModal(true); });
-        else
-          set(ref(db, `users/${user?.username}/posts`), JSON.stringify({})).then(snap => { setHeader("Oops!"); setMessage("Post deleted successfully"); setShowModal(true); });
-      }
-    })
+
   }
 
   return (
@@ -139,7 +129,17 @@ export default function ImageView() {
             <TouchableOpacity
               style={style.button}
               onPress={() => {
-                console.log("Delete");
+                const refPath = `users/${user?.username}/posts/${post.post_id}`;
+                get(ref(db, `users/${user?.username}/posts/`)).then(snap => {
+                  if (snap.exists()) {
+                    var posts = snap.val();
+                    posts = Object.keys(posts);
+                    if (posts.length > 1)
+                      remove(ref(db, refPath)).then(snap => { setHeader("Deleted"); setMessage("Post deleted successfully"); setShowModal(true); });
+                    else
+                      set(ref(db, `users/${user?.username}/posts`), JSON.stringify({})).then(snap => { setHeader("Oops!"); setMessage("Post deleted successfully"); setShowModal(true); });
+                  }
+                })
                 showOptions(false);
               }}
             >

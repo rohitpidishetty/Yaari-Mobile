@@ -234,7 +234,7 @@ export default function Explore() {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.suggestionsContainer}
-        style={{ flex: 2 }}
+        style={{ flex: 2, backgroundColor: "#111114", borderRadius:30, borderWidth:1,  borderColor: "rgba(255,255,255,0.05)" }}
       >
 
         {
