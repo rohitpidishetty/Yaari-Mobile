@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import {
   Image,
+  ImageBackground,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -20,6 +21,9 @@ import TDS from "./TrieDataStructure";
 import Validate from "./Validator";
 
 import { getDatabase, onValue, ref } from "firebase/database";
+
+import axios from "axios";
+import * as Location from "expo-location";
 
 export default function Explore() {
 
@@ -39,9 +43,6 @@ export default function Explore() {
     (state) => state.user?.userDetails?.payload
   );
 
-  /* =========================
-        FETCH USERS
-  ========================= */
 
   useEffect(() => {
 
@@ -69,9 +70,7 @@ export default function Explore() {
 
   }, []);
 
-  /* =========================
-        SEARCH
-  ========================= */
+
 
   useEffect(() => {
 
@@ -87,21 +86,74 @@ export default function Explore() {
     const results = [];
 
     matchedUsers.forEach((username) => {
-
       if (yaariUsers[username]) {
         results.push(yaariUsers[username]);
       }
-
     });
 
     setFindUsers(results);
 
   }, [searchUser, yaariUsers]);
 
+
+  const [suggestions, setSuggestions] = useState([]);
+  const [spinner, setSpinner] = useState(true);
+  const [coords, setCoords] = useState(null);
+
+
+  useEffect(() => {
+
+    (async () => {
+
+      try {
+
+        let { status } =
+          await Location.requestForegroundPermissionsAsync();
+
+        if (status !== "granted") {
+          console.log("Location permission denied");
+          setSpinner(false);
+          return;
+        }
+
+        let location =
+          await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.High,
+          });
+
+        const { latitude, longitude } =
+          location.coords;
+
+        const data = await axios.get(
+          `https://geo-genius-psi.vercel.app/location/?lat=${latitude}&lon=${longitude}`
+        );
+
+        setCoords({
+          lat: latitude,
+          lon: longitude,
+        });
+
+        setSuggestions(data.data);
+        setSpinner(false);
+
+      } catch (e) {
+
+        console.log("Geo error:", e);
+
+      } finally {
+
+        setSpinner(false);
+
+      }
+
+    })();
+
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
 
-      {/* SEARCH BAR */}
+
 
       <View style={styles.searchContainer}>
 
@@ -123,11 +175,11 @@ export default function Explore() {
 
       </View>
 
-      {/* RESULTS */}
+
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{ marginTop: 18 }}
+        style={{ marginTop: 18, height: 100 }}
       >
 
         {
@@ -176,6 +228,65 @@ export default function Explore() {
 
       </ScrollView>
 
+
+
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.suggestionsContainer}
+        style={{ flex: 2 }}
+      >
+
+        {
+          spinner &&
+          <View style={styles.loaderContainer}>
+
+            <Text style={{
+              color: "gray"
+            }}>Fetching hotSpots near you..</Text>
+          </View>
+        }
+        {suggestions?.suggest?.map((place, index) => {
+          return (
+            <ImageBackground
+              key={index}
+              source={{ uri: place.image_url }}
+              style={styles.card2}
+              imageStyle={{ borderRadius: 22 }}
+            >
+
+              <View style={styles.overlay} />
+
+              <View style={styles.cardContent}>
+
+                <Text style={styles.distance}>
+                  {place.distance}
+                </Text>
+
+                <Text style={styles.title}>
+                  {place.name}
+                </Text>
+
+                <Text style={styles.description}>
+                  {place.description}
+                </Text>
+
+              </View>
+
+            </ImageBackground>
+          );
+        })}
+
+        {suggestions?.suggest?.length === 0 && (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyText}>
+              No popular spots detected in the vicinity
+            </Text>
+          </View>
+        )}
+      </ScrollView>
+
+
     </SafeAreaView>
   )
 }
@@ -188,7 +299,10 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
 
-
+  loaderContainer: {
+    flex: 1,
+    alignItems: "center",
+  },
   searchContainer: {
 
     flexDirection: "row",
@@ -322,5 +436,114 @@ const styles = StyleSheet.create({
     lineHeight: 18,
 
     fontSize: 13,
+  },
+  suggestionsContainer: {
+    padding: 6,
+    paddingBottom: 2,
+  },
+
+
+  card: {
+    height: 180,
+
+    borderRadius: 24,
+
+    marginBottom: 16,
+
+    overflow: "hidden",
+
+    backgroundColor: "#141418",
+
+    // Apple floating effect
+    shadowColor: "#000",
+    shadowOpacity: 0.25,
+    shadowRadius: 14,
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+
+    elevation: 10,
+  },
+
+
+  card2: {
+    height: 100,
+
+    borderRadius: 24,
+
+    marginBottom: 16,
+
+    overflow: "hidden",
+
+    backgroundColor: "#141418",
+
+    // Apple floating effect
+    shadowColor: "#000",
+    shadowOpacity: 0.25,
+    shadowRadius: 14,
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+
+    elevation: 10,
+  },
+
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+
+    backgroundColor: "rgba(0,0,0,0.35)",
+  },
+
+  cardContent: {
+    position: "absolute",
+
+    bottom: 0,
+    left: 16,
+    right: 16,
+  },
+
+  distance: {
+    color: "#D1D1D6",
+
+    fontSize: 12,
+
+    fontWeight: "600",
+
+    marginBottom: 6,
+  },
+
+  title: {
+    color: "#FFFFFF",
+
+    fontSize: 20,
+    fontWeight: "800",
+
+    letterSpacing: 0.3,
+  },
+
+  description: {
+    color: "#E5E5EA",
+
+    marginTop: 6,
+
+    fontSize: 13.5,
+
+    lineHeight: 18,
+  },
+
+
+
+  emptyState: {
+    marginTop: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  emptyText: {
+    color: "#8E8E93",
+    fontSize: 14,
+    textAlign: "center",
   },
 });
