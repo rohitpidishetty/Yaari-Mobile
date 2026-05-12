@@ -11,8 +11,9 @@ export default function Footer() {
 
   const tabs = [
     { name: "Home", icon: "home-outline", activeIcon: "home", path: "/main" },
+    { name: "Camera", icon: "camera-outline", activeIcon: "camera", path: "/camera" },
     { name: "Search", icon: "search-outline", activeIcon: "search", path: "/explore" },
-    { name: "Messages", icon: "chatbox-outline", activeIcon: "chatbox", path: "/search" },
+    { name: "Messages", icon: "chatbox-outline", activeIcon: "chatbox", path: "/message_pool" },
     { name: "Notifications", icon: "notifications-outline", activeIcon: "notifications", path: "/notifications" },
     { name: "Profile", icon: "person-circle-outline", activeIcon: "person-circle", path: "/user" },
   ];

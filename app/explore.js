@@ -24,6 +24,7 @@ import { getDatabase, onValue, ref } from "firebase/database";
 
 import axios from "axios";
 import * as Location from "expo-location";
+import { router, useRouter } from "expo-router";
 
 export default function Explore() {
 
@@ -32,7 +33,7 @@ export default function Explore() {
   const trieObj = useRef(new TDS()).current;
 
   const validate = new Validate();
-
+  const route = useRouter();
   const [yaariUsers, setYaariUsers] = useState({});
 
   const [listOfUsers, setFindUsers] = useState([]);
@@ -191,6 +192,15 @@ export default function Explore() {
                 key={idx}
                 activeOpacity={0.85}
                 style={styles.userCard}
+                onPress={() => {
+                  if (sessionUser.username === user.username) { route.push("/user"); return; }
+                  router.push({
+                    pathname: "/yaari_user",
+                    params: {
+                      username: user.username,
+                    },
+                  });
+                }}
               >
 
                 <Image
@@ -234,7 +244,7 @@ export default function Explore() {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.suggestionsContainer}
-        style={{ flex: 2, backgroundColor: "#111114", borderRadius:30, borderWidth:1,  borderColor: "rgba(255,255,255,0.05)" }}
+        style={{ flex: 2, backgroundColor: "#111114", borderRadius: 30, borderWidth: 1, borderColor: "rgba(255,255,255,0.05)" }}
       >
 
         {

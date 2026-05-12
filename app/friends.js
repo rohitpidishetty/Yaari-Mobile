@@ -10,6 +10,7 @@ import {
 
 import axios from "axios";
 import * as Location from "expo-location";
+import { router } from "expo-router";
 import { getDatabase, onValue, ref, update } from "firebase/database";
 import { useSelector } from "react-redux";
 
@@ -131,7 +132,14 @@ export default function Friends() {
               if (item.username === sessionUser?.username) return null;
 
               return (
-                <TouchableOpacity style={styles.nearbyCard}>
+                <TouchableOpacity onPress={() => {
+                  router.push({
+                    pathname: "/yaari_user",
+                    params: {
+                      username: item.username,
+                    },
+                  });
+                }} style={styles.nearbyCard}>
                   <Image
                     source={{ uri: item.profile_picture }}
                     style={styles.nearbyDp}
@@ -152,7 +160,14 @@ export default function Friends() {
           Date.now() - activityTracker[item?.name] <= 3000000;
 
         return (
-          <TouchableOpacity style={styles.friendRow}>
+          <TouchableOpacity onPress={() => {
+            router.push({
+              pathname: "/yaari_user",
+              params: {
+                username: item.name,
+              },
+            });
+          }} style={styles.friendRow}>
             <View style={styles.avatarWrap}>
               <Image source={{ uri: item.dp }} style={styles.avatar} />
               {isActive && <View style={styles.activeDot} />}

@@ -66,6 +66,30 @@ export default function RootLayout() {
           name="post_comments"
           options={{ headerShown: false, animation: "slide_from_bottom" }}
         />
+        <Stack.Screen
+          name="yaari_user"
+          options={{ headerShown: false, animation: "slide_from_right" }}
+        />
+        <Stack.Screen
+          name="camera"
+          options={{ headerShown: false, animation: "fade_from_bottom" }}
+        />
+        <Stack.Screen
+          name="upload_image"
+          options={{ headerShown: false, animation: "fade_from_bottom" }}
+        />
+        <Stack.Screen
+          name="message_pool"
+          options={{ headerShown: false, animation: "slide_from_right" }}
+        />
+        <Stack.Screen
+          name="chat_room"
+          options={{ headerShown: false, animation: "slide_from_right" }}
+        />
+        <Stack.Screen
+          name="call"
+          options={{ headerShown: false, animation: "fade_from_bottom" }}
+        />
       </Stack>
     </Provider>
   );

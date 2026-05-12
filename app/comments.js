@@ -127,10 +127,10 @@ export default function Comments() {
                 <Text style={styles.username}>
                   {comment.post_comment_writer}
                 </Text>
-
-                <TouchableOpacity onPress={() => { handleDeleteComment(comment.post_comment_id) }} style={styles.deleteBtn}>
-                  <Ionicons name="trash-outline" size={18} color="#ff4d4d" />
-                </TouchableOpacity>
+                {comment.post_comment_writer === user.username &&
+                  <TouchableOpacity onPress={() => { handleDeleteComment(comment.post_comment_id) }} style={styles.deleteBtn}>
+                    <Ionicons name="trash-outline" size={18} color="#ff4d4d" />
+                  </TouchableOpacity>}
               </View>
 
               <Text style={styles.commentText}>

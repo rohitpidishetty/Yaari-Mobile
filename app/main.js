@@ -1,21 +1,28 @@
+import { mountComments } from "@/yaari_redux/commentsSlice";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import * as Device from 'expo-device';
+import * as FileSystem from "expo-file-system/legacy";
+import * as Notifications from 'expo-notifications';
+import { router as r, useRouter } from "expo-router";
+import * as Sharing from "expo-sharing";
 import { get, getDatabase, onValue, ref, remove, set, update } from "firebase/database";
 import md5 from "md5";
-
-import { mountComments } from "@/yaari_redux/commentsSlice";
-import * as FileSystem from "expo-file-system/legacy";
-import * as Sharing from "expo-sharing";
 import { useEffect, useState } from "react";
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
+import { FlatList, Image, Platform, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
+import "react-native-get-random-values";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import Alert from "./alert";
 import Footer from "./footer";
 import { styles } from "./Styles/StyleSheet";
 
-
 export default function Main() {
+
+
+
+
+
+
 
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
@@ -48,6 +55,7 @@ export default function Main() {
   const route = useRouter();
 
 
+
   useEffect(() => {
     const unsubscribe = onValue(ref(db, "users/"), (snapshot) => {
       if (!snapshot.exists()) return;
@@ -76,19 +84,19 @@ export default function Main() {
           currentFriends.includes(yaariUserId)
         ) {
           Object.values(user?.posts || {}).forEach((post) => {
-            if (typeof post !== "string") {
+            if (typeof post !== "string")
               posts.push(post);
-            }
           });
         }
       });
 
       if (typeof sessionUser?.posts !== "string") {
-        Object.values(sessionUser.posts || {}).forEach((post) => {
-          if (typeof post !== "string") {
-            posts.push(post);
-          }
-        });
+        Object.values(sessionUser.posts || {})
+          .forEach((post) => {
+            if (typeof post !== "string") {
+              posts.push(post);
+            }
+          });
       }
 
       posts.sort(
@@ -120,7 +128,7 @@ export default function Main() {
         const { signedUrl } = await res.json();
 
         const localPath =
-          FileSystem.cacheDirectory + `${payload.post_id}.jpg`;
+          FileSystem.documentDirectory + `${payload.post_id}.jpg`;
 
         const downloaded = await FileSystem.downloadAsync(
           signedUrl,
@@ -180,8 +188,19 @@ export default function Main() {
             }
           }
         });
+    }
 
 
+    function openYaariProfile() {
+      if (item.post_owner === sessionUser.username) { route.push("/user"); return; }
+
+      r.push({
+        pathname: "/yaari_user",
+        params: {
+          username: item.post_owner,
+        },
+      });
+      return;
     }
 
     function getPostAge() {
@@ -206,34 +225,34 @@ export default function Main() {
 
     return (
       <View style={style.postContainer}>
+
+
         <View style={style.header}>
+          <TouchableOpacity onPress={openYaariProfile}>
+            <View style={style.headerLeft}>
 
-          <View style={style.headerLeft}>
+              <Image
+                style={style.dp}
+                source={{
+                  uri: userImages[item?.post_owner],
+                }}
+              />
 
-            <Image
-              style={style.dp}
-              source={{
-                uri: userImages[item?.post_owner],
-              }}
-            />
-
-            <View>
-              <Text style={style.username}>
-                {item.post_owner}
-              </Text>
-
-              {
-                item?.post_location !== "" &&
-                <Text style={style.location}>
-                  {item?.post_location}
+              <View>
+                <Text style={style.username}>
+                  {item.post_owner}
                 </Text>
-              }
+
+                {
+                  item?.post_location !== "" &&
+                  <Text style={style.location}>
+                    {item?.post_location}
+                  </Text>
+                }
+              </View>
+
             </View>
-
-          </View>
-
-
-
+          </TouchableOpacity>
         </View>
         <Image
           style={style.postImage}
@@ -304,6 +323,123 @@ export default function Main() {
 
       </View>
     );
+  }
+
+
+
+  try {
+    (async function registerForPushNotificationsAsync() {
+      let token;
+
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldShowAlert: true,
+          shouldPlaySound: true,
+          shouldSetBadge: true,
+          shouldShowBanner: true,
+          shouldShowList: true,
+        }),
+      });
+      if (Platform.OS === "android") {
+        await Notifications.setNotificationChannelAsync(
+          "messages",
+          {
+            name: "Messages",
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lockscreenVisibility:
+              Notifications.AndroidNotificationVisibility.PUBLIC,
+          }
+        );
+      }
+
+      if (Device.isDevice) {
+        const { status: existingStatus } =
+          await Notifications.getPermissionsAsync();
+
+        let finalStatus = existingStatus;
+
+        if (existingStatus !== 'granted') {
+          const { status } =
+            await Notifications.requestPermissionsAsync();
+
+          finalStatus = status;
+        }
+
+        if (finalStatus !== 'granted') {
+          setHeader("Notifications");
+          setMessage('Permission not granted!');
+          setShowModal(true);
+          return;
+        }
+
+        token = (
+          await Notifications.getDevicePushTokenAsync()
+        ).data;
+
+        // console.log(token)
+
+
+        update(ref(db, `users/${sessionUser.username}/notification_id`), {
+          token: token
+        }).then(() => {
+
+        }).catch(() => {
+          setHeader("Oops!!");
+          setMessage('Notifications can not be sent to this device');
+          setShowModal(true);
+        })
+
+      } else {
+        setHeader("Notifications");
+        setMessage('Must use physical device');
+        setShowModal(true);
+      }
+
+      return token;
+    })();
+
+    useEffect(() => {
+
+      const receivedListener =
+        Notifications.addNotificationReceivedListener(
+          notification => {
+            console.log(
+              "Notification Received:",
+              notification
+            );
+          }
+        );
+
+
+      const responseListener =
+        Notifications.addNotificationResponseReceivedListener(
+          response => {
+
+            const data =
+              response.notification.request.content.data;
+
+            console.log("Notification Clicked:", data);
+
+            if (data?.chatId) {
+              router.push({
+                pathname: "/chat_room",
+                params: {
+                  id: data.chatId
+                }
+              });
+            }
+          }
+        );
+
+      return () => {
+        receivedListener.remove();
+        responseListener.remove();
+      };
+
+    }, []);
+  } catch (err) {
+    console.log(err)
   }
 
   return (

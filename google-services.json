@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "94315165841",
+    "firebase_url": "https://yaari-jud-default-rtdb.firebaseio.com",
+    "project_id": "yaari-jud",
+    "storage_bucket": "yaari-jud.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94315165841:android:f8e6de60bc762d3af0e730",
+        "android_client_info": {
+          "package_name": "Yaari.Jud"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHT-7cPC3sqKPSD1qG881rC2xYsqz8sa8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94315165841:android:097f4c320c92a159f0e730",
+        "android_client_info": {
+          "package_name": "com.yaari.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHT-7cPC3sqKPSD1qG881rC2xYsqz8sa8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

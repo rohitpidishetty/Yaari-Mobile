@@ -38,7 +38,7 @@ export default function ImageView() {
       const { signedUrl } = await res.json();
 
       const localPath =
-        FileSystem.cacheDirectory + `${payload.post_id}.jpg`;
+        FileSystem.documentDirectory + `${payload.post_id}.jpg`;
 
       const downloaded = await FileSystem.downloadAsync(
         signedUrl,
@@ -160,10 +160,12 @@ export default function ImageView() {
       </Modal>
       <View style={styles.header}>
         <Text style={styles.username}>{post?.post_owner}</Text>
-        <Pressable onPress={handleOptions}>
+        {
+          post.post_owner === user.username &&
+          <Pressable onPress={handleOptions}>
 
-          <Ionicons name="ellipsis-horizontal" size={20} color="white" />
-        </Pressable>
+            <Ionicons name="ellipsis-horizontal" size={20} color="white" />
+          </Pressable>}
       </View>
       <Image
         source={{ uri: post?.post_link }}
