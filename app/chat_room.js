@@ -186,13 +186,15 @@ export default function chat_room() {
 
   useEffect(() => {
     async function loadChats() {
-      if (!convoPayload?.chat) return;
+      if (!convoPayload?.chat || Object.keys(convoPayload.chat).length == 0 || convoPayload.chat.toString() === "{}") return;
       const decrypted = await processChats(convoPayload.chat);
       setDisplayChats(decrypted);
     }
     loadChats();
   }, [convoPayload]);
 
+
+  // console.log(displayChats)
   return (
     <SafeAreaView style={styles.container}>
 
@@ -286,7 +288,7 @@ export default function chat_room() {
         </View>
 
         {/* MESSAGES */}
-        {displayChats?.map((ch, index) => {
+        {Object.keys(displayChats).length != 0 && displayChats?.map((ch, index) => {
           const isMine =
             ch?.author === sessionUser?.username;
 

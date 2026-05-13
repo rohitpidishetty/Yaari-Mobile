@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
-import { getDatabase, onValue, ref } from "firebase/database";
+import { getDatabase, onValue, ref, update } from "firebase/database";
 import md5 from "md5";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Image, Pressable, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
@@ -15,7 +15,7 @@ const LazyComp = lazy(() => import("./lazyLoadSessionUsersPosts"));
 
 export default function YaariUser() {
 
-  const { username } = useLocalSearchParams();
+  const { username, profile, id } = useLocalSearchParams();
 
 
   const db = getDatabase();
@@ -148,7 +148,49 @@ export default function YaariUser() {
 
 
   function messageUser() {
-    console.log(username)
+
+    const altChatBufferId1 = md5(user.payload?.username + username);
+    const altChatBufferId2 = md5(username + user.payload?.username);
+    const chatBufferId = altChatBufferId1 < altChatBufferId2 ? altChatBufferId1 : altChatBufferId2;
+
+    update(ref(db, `convos/${chatBufferId}`), {
+      this: {
+        name: user.payload.username,
+        dp: user.payload.profile_picture,
+        deviceId: user.payload.notification_id?.token
+      },
+      to: {
+        name: username,
+        dp: profile,
+        deviceId: id
+      },
+      chatId: chatBufferId,
+      chat: JSON.stringify({})
+    }).then((snap) => {
+      axios.post("https://yaari.vercel.app/assoc_chat_id/",
+        {
+          convInitiator1: user?.payload.username,
+          convInitiator2: username,
+          chatId: chatBufferId
+        },
+        {
+          headers: { "Content-Type": "application/json" }
+        }).then(res => {
+          // setShowLoading(false);
+
+          if (res.data.status == 200) {
+            router.push({
+              pathname: "/chat_room",
+              params: {
+                id: chatBufferId
+              }
+            })
+
+          }
+        })
+    }).catch(e => {
+      // setShowLoading(false);
+    })
   }
 
   const [message, setMessage] = useState("");

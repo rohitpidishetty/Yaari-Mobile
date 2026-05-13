@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 import * as Location from "expo-location";
 import { router } from "expo-router";
-import { getDatabase, onValue, ref, update } from "firebase/database";
+import { get, getDatabase, onValue, ref, update } from "firebase/database";
 import { useSelector } from "react-redux";
 
 export default function Friends() {
@@ -111,6 +111,47 @@ export default function Friends() {
       ? Object.values(sessionUser?.friends || {})
       : [];
 
+  const [idMap, setIdMap] = useState({});
+
+  const fetchFriends = async () => {
+    for (const f of friends) {
+      try {
+        const snap = await get(ref(db, `users/${f.name}`));
+
+        if (snap.exists()) {
+          const val = snap.val();
+          if (val === undefined) {
+
+            idMap[f.name] = {
+              token: null,
+              dp: val.profile_picture
+            }
+
+          }
+          else {
+
+            idMap[f.name] = {
+              token: val.notification_id,
+              dp: val.profile_picture
+            }
+
+          }
+        }
+        else {
+          idMap[f.name] = {
+            token: null,
+            dp: null
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+  };
+
+  fetchFriends();
+
   return (
     <FlatList
       style={styles.container}
@@ -133,10 +174,13 @@ export default function Friends() {
 
               return (
                 <TouchableOpacity onPress={() => {
+
                   router.push({
                     pathname: "/yaari_user",
                     params: {
                       username: item.username,
+                      profile: idMap[item.username].dp,
+                      id: idMap[item.username].token
                     },
                   });
                 }} style={styles.nearbyCard}>
@@ -165,6 +209,8 @@ export default function Friends() {
               pathname: "/yaari_user",
               params: {
                 username: item.name,
+                profile: idMap[item.name].dp,
+                id: idMap[item.name].token
               },
             });
           }} style={styles.friendRow}>

@@ -51,8 +51,9 @@ export default function ImageView() {
       });
 
     } catch (err) {
+
       setHeader("Oops")
-      setMessage("Please try again later");
+      setMessage("Please try again later " + err.toString());
       setShowModal(true);
     }
   };

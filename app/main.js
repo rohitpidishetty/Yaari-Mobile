@@ -198,8 +198,12 @@ export default function Main() {
         pathname: "/yaari_user",
         params: {
           username: item.post_owner,
+          profile: null,
+          id: null
         },
       });
+
+
       return;
     }
 

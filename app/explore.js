@@ -198,6 +198,8 @@ export default function Explore() {
                     pathname: "/yaari_user",
                     params: {
                       username: user.username,
+                      profile: user.profile_picture,
+                      id: user.notification_id.token
                     },
                   });
                 }}
