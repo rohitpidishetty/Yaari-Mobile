@@ -5,6 +5,7 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import RASecuredMessagingProtocol from "./RASMP";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function MessagePool() {
   const user = useSelector((state) => state.user.userDetails.payload);
@@ -57,6 +58,7 @@ export default function MessagePool() {
     <View>
       {userChats?.length == 0 && (
         <View style={styles.emptyContainer}>
+          <Ionicons name="chatbubbles-outline" size={70} color="#999" />
           <Text style={styles.emptyText}>
             Looks like your inbox is enjoying a nap
           </Text>

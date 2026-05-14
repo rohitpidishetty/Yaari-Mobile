@@ -160,7 +160,11 @@ export default function Friends() {
       keyExtractor={(item, i) => i.toString()}
       ListHeaderComponent={
         <>
-          <Text style={styles.heading}>People Nearby</Text>
+          {
+            nearby.length === 0 ?
+              <Text style={styles.heading}></Text> :
+              <Text style={styles.heading}>People Nearby</Text>
+          }
 
           <FlatList
             horizontal
@@ -244,6 +248,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
     marginTop: 18,
+    marginBottom: 20
   },
 
   nearbyCard: {

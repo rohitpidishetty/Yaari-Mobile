@@ -36,7 +36,14 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="comments"
-          options={{ headerShown: false, animation: "slide_from_bottom" }}
+          options={{
+            headerShown: false,
+            animation: "slide_from_bottom",
+            contentStyle: {
+              backgroundColor: "#000",
+            },
+            navigationBarColor: "#000",
+          }}
         />
         <Stack.Screen
           name="friends"
@@ -64,7 +71,14 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="post_comments"
-          options={{ headerShown: false, animation: "slide_from_bottom" }}
+          options={{
+            headerShown: false,
+            animation: "slide_from_bottom",
+            contentStyle: {
+              backgroundColor: "#000",
+            },
+            navigationBarColor: "#000",
+          }}
         />
         <Stack.Screen
           name="yaari_user"
@@ -84,7 +98,14 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="chat_room"
-          options={{ headerShown: false, animation: "slide_from_right" }}
+          options={{
+            headerShown: false,
+            animation: "slide_from_right",
+            contentStyle: {
+              backgroundColor: "#000",
+            },
+            navigationBarColor: "#000",
+          }}
         />
         <Stack.Screen
           name="call"

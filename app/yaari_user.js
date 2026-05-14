@@ -238,6 +238,9 @@ export default function YaariUser() {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
+                  setHeader("Alert")
+                  setMessage("Clearing all your previous chats")
+                  setShowModal(true)
                   messageUser()
                 }}
                 style={{

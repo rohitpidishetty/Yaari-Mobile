@@ -53,7 +53,7 @@ export default function ImageView() {
     } catch (err) {
 
       setHeader("Oops")
-      setMessage("Please try again later " + err.toString());
+      setMessage("Please try again later");
       setShowModal(true);
     }
   };

@@ -1,6 +1,6 @@
 import md5 from "md5";
 import { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
@@ -78,54 +78,57 @@ export default function PostComment() {
 
 
 
-  return (<SafeAreaView style={styles.container}>
-    <Alert message={message} setShowModal={setShowModal} showModal={showModal} header={header} />
-    <KeyboardAwareScrollView
-      style={{ flex: 1 }}
-      contentContainerStyle={styles.scroll}
-      enableOnAndroid={true}
-      keyboardShouldPersistTaps="handled"
-      extraScrollHeight={20}
-    >
-      {comments.length !== 0 && comments.map((comment, index) => (
-        <View key={index} style={styles.commentRow}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>
-              {comment?.post_comment_writer?.charAt(0)?.toUpperCase()}
-            </Text>
-          </View>
-
-          <View style={styles.bubble}>
-            <View style={styles.commentHeader}>
-              <Text style={styles.username}>
-                {comment.post_comment_writer}
+  return (
+    <KeyboardAvoidingView style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 25}>
+      <Alert message={message} setShowModal={setShowModal} showModal={showModal} header={header} />
+      <KeyboardAwareScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.scroll}
+        enableOnAndroid={true}
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={20}
+      >
+        {comments.length !== 0 && comments.map((comment, index) => (
+          <View key={index} style={styles.commentRow}>
+            <View style={styles.avatar}>
+              <Text style={styles.avatarText}>
+                {comment?.post_comment_writer?.charAt(0)?.toUpperCase()}
               </Text>
-
-
             </View>
 
-            <Text style={styles.commentText}>
-              {comment.post_comment}
-            </Text>
+            <View style={styles.bubble}>
+              <View style={styles.commentHeader}>
+                <Text style={styles.username}>
+                  {comment.post_comment_writer}
+                </Text>
+
+
+              </View>
+
+              <Text style={styles.commentText}>
+                {comment.post_comment}
+              </Text>
+            </View>
           </View>
-        </View>
-      ))}
-    </KeyboardAwareScrollView>
-    <View style={styles.inputBar}>
-      <TextInput
-        value={text}
-        onChangeText={setText}
-        placeholder="Add a comment.."
-        placeholderTextColor="#888"
-        style={styles.input}
-      />
+        ))}
+      </KeyboardAwareScrollView>
+      <View style={styles.inputBar}>
+        <TextInput
+          value={text}
+          onChangeText={setText}
+          placeholder="Add a comment.."
+          placeholderTextColor="#888"
+          style={styles.input}
+        />
 
-      <TouchableOpacity onPress={handleComment}>
-        <Text style={styles.postBtn}>Post</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={handleComment}>
+          <Text style={styles.postBtn}>Post</Text>
+        </TouchableOpacity>
 
-    </View>
-  </SafeAreaView>)
+      </View>
+    </KeyboardAvoidingView>)
 
 }
 
@@ -133,6 +136,7 @@ export default function PostComment() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 20,
     backgroundColor: "#000",
   },
 

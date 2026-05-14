@@ -13,6 +13,8 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Platform,
+  KeyboardAvoidingView
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
@@ -196,7 +198,9 @@ export default function chat_room() {
 
   // console.log(displayChats)
   return (
-    <SafeAreaView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 25}>
 
       <View style={styles.header}>
         {convoPayload && (
@@ -415,7 +419,7 @@ export default function chat_room() {
           />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 
 }
@@ -448,7 +452,7 @@ const styles = StyleSheet.create({
   avatar: {
     width: 38,
     height: 38,
-    borderRadius: 14,
+    borderRadius: 50,
     marginRight: 10,
   },
 
@@ -475,6 +479,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
+    paddingTop: 20,
     backgroundColor: "#000",
   },
 

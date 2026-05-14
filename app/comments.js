@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import md5 from 'md5';
 import { useEffect, useState } from "react";
 import {
+  KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
@@ -105,7 +106,9 @@ export default function Comments() {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 25}>
       <Alert message={message} setShowModal={setShowModal} showModal={showModal} header={header} />
       <KeyboardAwareScrollView
         style={{ flex: 1 }}
@@ -155,7 +158,7 @@ export default function Comments() {
         </TouchableOpacity>
 
       </View>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -163,6 +166,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#000",
+    paddingTop: 20
   },
 
   loading: {
