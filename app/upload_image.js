@@ -12,7 +12,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
+  Keyboard
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
@@ -122,7 +123,6 @@ export default function UploadImage() {
   return (
     <SafeAreaView style={styles.container}>
       <Alert message={message} setShowModal={setShowModal} showModal={showModal} header={header} />
-
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
@@ -137,38 +137,36 @@ export default function UploadImage() {
           <TouchableOpacity />
 
         </View>
+        <TouchableOpacity onPress={Keyboard.dismiss}>
+          <Image source={{ uri: photo }} style={styles.image} />
+          <View style={styles.form}>
 
-        <Image source={{ uri: photo }} style={styles.image} />
+            <View style={styles.row}>
+              <Ionicons name="location-outline" size={20} color="#1E88E5" />
+              <Text style={styles.text}>
+                {locationName || "Getting location..."}
+              </Text>
+            </View>
 
-        <View style={styles.form}>
 
-          <View style={styles.row}>
-            <Ionicons name="location-outline" size={20} color="#1E88E5" />
-            <Text style={styles.text}>
-              {locationName || "Getting location..."}
-            </Text>
+            <View style={styles.caption}>
+              <Ionicons name="create-outline" size={20} color="#888" />
+
+              <TextInput
+                placeholder="Write a description.."
+                placeholderTextColor="#888"
+                value={description}
+                onChangeText={setDescription}
+                style={styles.input}
+                multiline
+              />
+            </View>
+
           </View>
-
-
-          <View style={styles.caption}>
-            <Ionicons name="create-outline" size={20} color="#888" />
-
-            <TextInput
-              placeholder="Write a description.."
-              placeholderTextColor="#888"
-              value={description}
-              onChangeText={setDescription}
-              style={styles.input}
-              multiline
-            />
-          </View>
-
-        </View>
-
+        </TouchableOpacity>
         <TouchableOpacity style={styles.fab} onPress={handleShare}>
           <Ionicons name="arrow-up" size={22} color="white" />
         </TouchableOpacity>
-
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

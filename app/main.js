@@ -217,7 +217,9 @@ export default function Main() {
       return age.toString();
     }
 
-    const likesCount = item?.post_likes
+    
+
+    const likesCount = item?.post_likes && item.post_likes.toString() !== "{}"
       ? Object.keys(item.post_likes).length
       : 0;
 
@@ -296,7 +298,7 @@ export default function Main() {
         </View>
 
         <Text style={style.likesText}>
-          {likesCount} likes
+          {likesCount} likes 
         </Text>
 
         {
