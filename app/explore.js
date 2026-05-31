@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   Image,
   ImageBackground,
+  Keyboard,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -25,9 +26,10 @@ import { getDatabase, onValue, ref } from "firebase/database";
 import axios from "axios";
 import * as Location from "expo-location";
 import { router, useRouter } from "expo-router";
+import Slider from "@react-native-community/slider";
 
 export default function Explore() {
-
+  const [km, setKm] = useState(7);
   const [searchUser, setSearchUser] = useState("");
 
   const trieObj = useRef(new TDS()).current;
@@ -126,7 +128,7 @@ export default function Explore() {
           location.coords;
 
         const data = await axios.get(
-          `https://geo-genius-psi.vercel.app/location/?lat=${latitude}&lon=${longitude}`
+          `https://geo-genius-psi.vercel.app/variable_suggest/?lat=${latitude}&lon=${longitude}&km=${km}`
         );
 
         setCoords({
@@ -144,12 +146,10 @@ export default function Explore() {
       } finally {
 
         setSpinner(false);
-
       }
 
     })();
-
-  }, []);
+  }, [km]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -166,7 +166,7 @@ export default function Explore() {
           onChangeText={setSearchUser}
         />
 
-        <Pressable style={styles.searchButton}>
+        <Pressable onPress={Keyboard.dismiss} style={styles.searchButton}>
           <Ionicons
             name="search-outline"
             size={22}
@@ -249,13 +249,20 @@ export default function Explore() {
         style={{ flex: 2, backgroundColor: "#111114", borderRadius: 30, borderWidth: 1, borderColor: "rgba(255,255,255,0.05)" }}
       >
 
+        <Slider
+          minimumValue={0}
+          maximumValue={100}
+          value={km}
+          onValueChange={setKm}
+        />
+
         {
           spinner &&
           <View style={styles.loaderContainer}>
 
             <Text style={{
               color: "gray"
-            }}>Fetching hotSpots near you..</Text>
+            }}>Fetching hotSpots within {parseInt(km)} km from you..</Text>
           </View>
         }
         {suggestions?.suggest?.map((place, index) => {
@@ -292,7 +299,7 @@ export default function Explore() {
         {suggestions?.suggest?.length === 0 && (
           <View style={styles.emptyState}>
             <Text style={styles.emptyText}>
-              No popular spots detected in the vicinity
+              No popular spots detected within {parseInt(km)} km of the vicinity
             </Text>
           </View>
         )}

@@ -149,6 +149,8 @@ export default function ImageView() {
               </Text>
             </TouchableOpacity>
 
+           
+
             <TouchableOpacity
               style={style.button}
               onPress={() => showOptions(false)}

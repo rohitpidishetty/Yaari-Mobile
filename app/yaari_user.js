@@ -148,11 +148,9 @@ export default function YaariUser() {
 
 
   function messageUser() {
-
     const altChatBufferId1 = md5(user.payload?.username + username);
     const altChatBufferId2 = md5(username + user.payload?.username);
     const chatBufferId = altChatBufferId1 < altChatBufferId2 ? altChatBufferId1 : altChatBufferId2;
-
     update(ref(db, `convos/${chatBufferId}`), {
       this: {
         name: user.payload.username,
@@ -169,15 +167,13 @@ export default function YaariUser() {
     }).then((snap) => {
       axios.post("https://yaari.vercel.app/assoc_chat_id/",
         {
-          convInitiator1: user?.payload.username,
+          convInitiator1: user.payload?.username,
           convInitiator2: username,
           chatId: chatBufferId
         },
         {
           headers: { "Content-Type": "application/json" }
         }).then(res => {
-          // setShowLoading(false);
-
           if (res.data.status == 200) {
             router.push({
               pathname: "/chat_room",
@@ -185,11 +181,10 @@ export default function YaariUser() {
                 id: chatBufferId
               }
             })
-
           }
         })
     }).catch(e => {
-      // setShowLoading(false);
+      alert(e)
     })
   }
 
@@ -275,7 +270,7 @@ export default function YaariUser() {
             </Pressable>
 
             <Pressable>
-              <Text style={{ color: "white" }}>Friends {Object.keys(userPayload?.friends)?.length.toString()}</Text>
+              <Text style={{ color: "white" }}>Friends {userPayload?.friends.toString() !== "{}" ? Object.keys(userPayload?.friends)?.length.toString() : 0}</Text>
             </Pressable>
           </View>
           <View>
@@ -287,7 +282,7 @@ export default function YaariUser() {
 
 
       <Suspense fallback="Loading Posts..">
-        <LazyComp posts={Object.values(userPayload?.posts)} />
+        {userPayload?.posts?.toString() !== "{}" && <LazyComp posts={Object.values(userPayload?.posts)} />}
       </Suspense>
 
     </SafeAreaView>

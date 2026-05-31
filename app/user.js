@@ -215,7 +215,23 @@ export default function User() {
       </View>
 
 
-      <Suspense fallback="Loading Posts..">
+
+      <Suspense
+        fallback={
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Image
+              source={require("../assets/images/icon.png")}
+              style={{ width: 80, height: 80 }}
+            />
+          </View>
+        }
+      >
         <LazyComp posts={Object.values(userPayload?.posts)} />
       </Suspense>
 

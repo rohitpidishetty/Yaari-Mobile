@@ -105,7 +105,6 @@ export default function Comments() {
     });
   };
 
-
   return (
     <KeyboardAvoidingView style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -118,7 +117,8 @@ export default function Comments() {
         keyboardShouldPersistTaps="handled"
         extraScrollHeight={20}
       >
-        {comments.map((comment, index) => (
+        {comments[0] === "{" && comments[1] === "}" && <Text style={{ color: "white", textAlign: "center" }}>No Comments</Text>}
+        {comments[0] !== "{" && comments[1] !== "}" && comments.map((comment, index) => (
           <View key={index} style={styles.commentRow}>
             <View style={styles.avatar}>
               <Text style={styles.avatarText}>

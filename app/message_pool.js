@@ -55,10 +55,10 @@ export default function MessagePool() {
   return (<SafeAreaView style={styles.container}>
     <Text style={styles.heading}>Messages</Text>
 
-    <View>
+    <View style={{ flex: 1 }}>
       {userChats?.length == 0 && (
         <View style={styles.emptyContainer}>
-          <Ionicons name="chatbubbles-outline" size={70} color="#999" />
+          <Ionicons name="chatbubbles-outline" size={60} color="#999" />
           <Text style={styles.emptyText}>
             Looks like your inbox is enjoying a nap
           </Text>
@@ -170,14 +170,14 @@ const styles = StyleSheet.create({
   },
 
   emptyContainer: {
-    marginTop: 100,
     alignItems: "center",
     justifyContent: "center",
+    flex: 1
   },
 
   emptyText: {
     color: "#8E8E93",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "500",
   },
 

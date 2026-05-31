@@ -103,7 +103,6 @@ export const styles = StyleSheet.create({
   },
   button: {
     width: '100%',
-    borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: '#C6C6C8',
     paddingVertical: 12,
   },

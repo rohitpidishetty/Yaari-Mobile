@@ -23,7 +23,7 @@
       "permissions": [],
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.yaari.app",
+      "package": "com.jud.yaari",
       "plugins": [
         "expo-notifications"
       ]
