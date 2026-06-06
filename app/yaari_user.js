@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import Alert from "./alert";
 import Footer from "./footer";
 import { styles } from "./Styles/StyleSheet";
+import { Ionicons } from "@expo/vector-icons";
 
 
 const LazyComp = lazy(() => import("./lazyLoadSessionUsersPosts"));
@@ -226,8 +227,8 @@ export default function YaariUser() {
                   width: "45%"
                 }}
               >
-                <Text style={{ color: "white", textAlign: "center" }}>
-                  {connected ? "Remove" : "Add Yaari"}
+                <Text style={{ color: "white", textAlign: "center", fontWeight: 900 }}>
+                  {connected ? <Ionicons name="person-remove-outline" size={20} color="#fff" /> : <Ionicons name="person-add-outline" size={20} color="#fff" />}
                 </Text>
 
               </TouchableOpacity>
@@ -246,8 +247,8 @@ export default function YaariUser() {
                   width: "45%"
                 }}>
 
-                <Text style={{ color: "white", textAlign: "center" }}>
-                  Message
+                <Text style={{ color: "white", textAlign: "center", fontWeight: 900 }}>
+                  <Ionicons name="chatbox-outline" size={20} color="#fff" />
                 </Text>
               </TouchableOpacity>
             </View>

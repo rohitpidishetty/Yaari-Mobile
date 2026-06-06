@@ -190,20 +190,23 @@ export default function Main() {
         });
     }
 
-
     function openYaariProfile() {
       if (item.post_owner === sessionUser.username) { route.push("/user"); return; }
-
-      r.push({
-        pathname: "/yaari_user",
-        params: {
-          username: item.post_owner,
-          profile: null,
-          id: null
-        },
-      });
-
-
+      get(ref(db, `users/${item.post_owner}`)).then(snap => {
+        if (snap.exists()) {
+          const payload = snap.val();
+          r.push({
+            pathname: "/yaari_user",
+            params: {
+              username: item.post_owner,
+              profile: payload.profile_picture,
+              id: payload.notification_id.token
+            },
+          });
+        }
+      }).catch(err => {
+        alert("Error occurred, try again later");
+      })
       return;
     }
 
@@ -217,7 +220,7 @@ export default function Main() {
       return age.toString();
     }
 
-    
+
 
     const likesCount = item?.post_likes && item.post_likes.toString() !== "{}"
       ? Object.keys(item.post_likes).length
@@ -298,7 +301,7 @@ export default function Main() {
         </View>
 
         <Text style={style.likesText}>
-          {likesCount} likes 
+          {likesCount} likes
         </Text>
 
         {

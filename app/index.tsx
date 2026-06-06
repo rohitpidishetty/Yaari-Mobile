@@ -233,7 +233,11 @@ export default function Index() {
           >
             Don't have an account?
           </Text>
-          <TouchableOpacity onPress={() => router.push("/signup")}>
+          <TouchableOpacity
+            onPress={() => {
+              alert("Use browser to sign up, visit https://yaari-jud.web.app");
+            }}
+          >
             <Text style={styles.linkText}>Sign Up</Text>
           </TouchableOpacity>
         </View>

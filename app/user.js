@@ -176,7 +176,7 @@ export default function User() {
                   borderRadius: 8,
                 }}
               >
-                <Text style={{ color: "white", textAlign: "center" }}>
+                <Text style={{ color: "white", textAlign: "center", fontWeight: 900 }}>
                   Edit Profile
                 </Text>
               </Pressable>
@@ -200,11 +200,11 @@ export default function User() {
             <Text style={{ color: "white" }}>{user.payload?.username.toString()}</Text>
 
             <Pressable>
-              <Text style={{ color: "white" }}>Posts {Object.keys(user?.payload?.posts)?.length.toString()}</Text>
+              <Text style={{ color: "white" }}>Posts {user?.payload?.posts.toString() !== "{}" ? Object.keys(user?.payload?.posts)?.length.toString() : 0}</Text>
             </Pressable>
 
             <Pressable onPress={() => router.push("/friends")}>
-              <Text style={{ color: "white" }}>Friends {Object.keys(user?.payload?.friends)?.length.toString()}</Text>
+              <Text style={{ color: "white" }}>Friends {user?.payload?.friends.toString() !== "{}" ? Object.keys(user?.payload?.friends)?.length.toString() : 0}</Text>
             </Pressable>
           </View>
           <View>

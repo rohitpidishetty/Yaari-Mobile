@@ -2,7 +2,7 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import * as ImagePicker from "expo-image-picker";
 import { router, useLocalSearchParams } from "expo-router";
-import { getDatabase, onValue, ref, update } from "firebase/database";
+import { get, getDatabase, onValue, ref, update } from "firebase/database";
 import md5 from "md5";
 import { useEffect, useState } from "react";
 import {
@@ -205,19 +205,30 @@ export default function chat_room() {
       <View style={styles.header}>
         {convoPayload && (
           <>
-
             <TouchableOpacity
               style={styles.leftDiv}
               onPress={() => {
-                router.push({
-                  pathname: "/yaari_user",
-                  params: {
-                    username: (convoPayload.this?.name ===
-                      sessionUser?.username
-                      ? convoPayload.to?.name
-                      : convoPayload.this?.name),
-                  },
-                });
+                const name = (convoPayload.this?.name ===
+                  sessionUser?.username
+                  ? convoPayload.to?.name
+                  : convoPayload.this?.name);
+
+                get(ref(db, `users/${name}`))
+                  .then(snap => {
+                    if (snap.exists()) {
+                      const payload = snap.val();
+                      router.push({
+                        pathname: "/yaari_user",
+                        params: {
+                          username: name,
+                          profile: payload.profile_picture,
+                          id: payload.notification_id.token
+                        },
+                      });
+                    }
+                  }).catch(err => {
+                    alert("Error occurred, try again later");
+                  })
               }
               }
             >
@@ -239,6 +250,7 @@ export default function chat_room() {
                   : convoPayload.this?.name}
               </Text>
             </TouchableOpacity>
+
             {/* 
             <TouchableOpacity
               style={styles.callButton}
@@ -283,6 +295,7 @@ export default function chat_room() {
 
         style={styles.chatArea}
         keyboardShouldPersistTaps="handled"
+        backgroundColor="#101418"
       >
         {/* ENCRYPTION INFO */}
         <View style={styles.notice}>
@@ -584,11 +597,11 @@ const styles = StyleSheet.create({
 
     backgroundColor: "#1C1C1E",
 
-    borderRadius: 20,
+    borderRadius: 10,
 
     paddingHorizontal: 14,
-    paddingVertical: 10,
-
+    paddingVertical: 14,
+    margin:10,
     fontSize: 15,
   },
 

@@ -106,8 +106,10 @@ export default function Explore() {
 
   useEffect(() => {
 
+
     (async () => {
 
+      console.log("Fetching..");
       try {
 
         let { status } =
@@ -126,7 +128,7 @@ export default function Explore() {
 
         const { latitude, longitude } =
           location.coords;
-
+        // console.log(`https://geo-genius-psi.vercel.app/variable_suggest/?lat=${latitude}&lon=${longitude}&km=${parseInt(km)}`)
         const data = await axios.get(
           `https://geo-genius-psi.vercel.app/variable_suggest/?lat=${latitude}&lon=${longitude}&km=${km}`
         );
